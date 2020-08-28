@@ -61,10 +61,7 @@ def preprocess_dataset(cfg):
     for split in ["train", "test", "val"]:
         print("Extracting features for {} set".format(split))
         futures = []
-        if "language" in cfg.dataset:
-            split_path = out_dir / cfg.dataset.language / split
-        else:
-            split_path = out_dir / split
+        split_path = out_dir / split
         if not split_path.with_suffix(".json").exists():
             print("Skipping {} (no json file)".format(split))
             continue
