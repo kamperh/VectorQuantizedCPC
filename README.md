@@ -36,12 +36,16 @@ Leader-board for the ZeroSpeech 2020 challenge can be found [here](https://zeros
     python preprocess.py in_dir=/path/to/dataset dataset=[2019/english or 2019/surprise]
     ```
     Note: `in_dir` must be the path to the `2019` folder. 
-    For `dataset` choose between `2019/english` or `2019/surprise`.
+    For `dataset` choose between `2019/english`, `2019/surprise` or `buckeye`.
     Other datasets will be added in the future.
     
     Example usage:
     ```
     python preprocess.py in_dir=../datasets/2020/2019 dataset=2019/english
+    ```
+    or
+    ```
+    python preprocess.py in_dir=../datasets/buckeye dataset=buckeye
     ```
     
 ## Training
