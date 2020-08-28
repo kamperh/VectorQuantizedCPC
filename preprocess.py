@@ -72,6 +72,8 @@ def preprocess_dataset(cfg):
             metadata = json.load(file)
             for in_path, start, duration, out_path in metadata:
                 wav_path = in_dir / in_path
+                assert wav_path.with_suffix(".wav").exists(), "'{}' does not exist".format(
+                    wav_path.with_suffix(".wav"))                
                 out_path = out_dir / out_path
                 out_path.parent.mkdir(parents=True, exist_ok=True)
                 futures.append(executor.submit(
