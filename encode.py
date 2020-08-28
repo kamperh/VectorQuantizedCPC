@@ -17,7 +17,7 @@ def encode_dataset(cfg):
     out_dir.mkdir(exist_ok=True, parents=True)
 
     root_path = Path(utils.to_absolute_path("datasets")) / cfg.dataset.path
-    with open(root_path / "test.json") as file:
+    with open((root_path / cfg.split).with_suffix(".json")) as file:
         metadata = json.load(file)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -32,6 +32,10 @@ def encode_dataset(cfg):
 
     encoder.eval()
 
+    if cfg.save_embedding:
+        embedding_path = out_dir / "embedding.npy"
+        np.save(embedding_path, encoder.codebook.embedding.cpu().numpy())
+
     if cfg.save_auxiliary:
         auxiliary = []
 
@@ -41,7 +45,7 @@ def encode_dataset(cfg):
         encoder.encoder[-1].register_forward_hook(hook)
 
     for _, _, _, path in tqdm(metadata):
-        path = root_path.parent / path
+        path = root_path / path
         mel = torch.from_numpy(np.load(path.with_suffix(".mel.npy"))).unsqueeze(0).to(device)
         with torch.no_grad():
             z, c, indices = encoder.encode(mel)
@@ -52,15 +56,24 @@ def encode_dataset(cfg):
         with open(out_path.with_suffix(".txt"), "w") as file:
             np.savetxt(file, z, fmt="%.16f")
 
+        if cfg.save_indices:
+            indices_path = out_dir / "indices"
+            indices_path.mkdir(exist_ok=True, parents=True)
+            out_path = indices_path / path.stem
+            indices = indices.squeeze().cpu().numpy()
+            if not indices.shape==():
+                with open(out_path.with_suffix(".txt"), "w") as file:
+                    np.savetxt(file, indices, fmt="%d")
+
         if cfg.save_auxiliary:
-            aux_path = out_dir.parent / "auxiliary_embedding1"
+            aux_path = out_dir / "auxiliary_embedding1"
             aux_path.mkdir(exist_ok=True, parents=True)
             out_path = aux_path / path.stem
             c = c.squeeze().cpu().numpy()
             with open(out_path.with_suffix(".txt"), "w") as file:
                 np.savetxt(file, c, fmt="%.16f")
 
-            aux_path = out_dir.parent / "auxiliary_embedding2"
+            aux_path = out_dir / "auxiliary_embedding2"
             aux_path.mkdir(exist_ok=True, parents=True)
             out_path = aux_path / path.stem
             aux = auxiliary.pop().squeeze().cpu().numpy()

@@ -37,7 +37,7 @@ class CPCDataset(Dataset):
         mels = list()
         paths = random.sample(paths, self.n_utterances_per_speaker)
         for path in paths:
-            path = self.root.parent / path
+            path = self.root / path
             mel = np.load(path.with_suffix(".mel.npy"))
             pos = random.randint(0, mel.shape[1] - self.n_sample_frames)
             mel = mel[:, pos:pos + self.n_sample_frames]

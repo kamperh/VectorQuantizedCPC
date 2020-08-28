@@ -33,11 +33,11 @@ Leader-board for the ZeroSpeech 2020 challenge can be found [here](https://zeros
     
 3.  Preprocess audio and extract train/test log-Mel spectrograms:
     ```
-    python preprocess.py in_dir=/path/to/dataset dataset=[2019/english or 2019/surprise]
+    python preprocess.py in_dir=/path/to/dataset dataset=[2019/english or 2019/surprise or buckeye]
     ```
-    Note: `in_dir` must be the path to the `2019` folder. 
-    For `dataset` choose between `2019/english` or `2019/surprise`.
-    Other datasets will be added in the future.
+    For `dataset` choose between `2019/english`, `2019/surprise` or `buckeye`.
+    Note: `in_dir` must be the path to the `2019` folder or the original
+    Buckeye dataset directory. Other datasets will be added in the future.
     
     Example usage:
     ```
@@ -48,11 +48,15 @@ Leader-board for the ZeroSpeech 2020 challenge can be found [here](https://zeros
    
 1.  Train the VQ-CPC model (or download pretrained weights [here](https://github.com/bshall/VectorQuantizedCPC/releases/tag/v0.1)):
     ```
-    python train_cpc.py checkpoint_dir=path/to/checkpoint_dir dataset=[2019/english or 2019/surprise]
+    python train_cpc.py checkpoint_dir=path/to/checkpoint_dir dataset=[2019/english or 2019/surprise or buckeye]
     ```
     Example usage:
     ```
     python train_cpc.py checkpoint_dir=checkpoints/cpc/2019english dataset=2019/english
+    ```
+    or
+    ```
+    python train_cpc.py checkpoint_dir=checkpoints/cpc/buckeye dataset=buckeye training.sample_frames=64  model.encoder.n_embeddings=256 training.scheduler.warmup_epochs=250
     ```
     
 2.  Train the vocoder:
@@ -95,10 +99,15 @@ Voice conversion samples are available [here](https://bshall.github.io/VectorQua
     
 1.  Encode test data for evaluation:
     ```
-    python encode.py checkpoint=path/to/checkpoint out_dir=path/to/out_dir dataset=[2019/english or 2019/surprise]
+    python encode.py checkpoint=path/to/checkpoint out_dir=path/to/out_dir dataset=[2019/english or 2019/surprise or buckeye]
     ```
+    Example usage:
     ```
-    e.g. python encode.py checkpoint=checkpoints/2019english/model.ckpt-500000.pt out_dir=submission/2019/english/test dataset=2019/english
+    python encode.py checkpoint=checkpoints/cpc/english2019/model.ckpt-22000.pt out_dir=submission/2019/english/test dataset=2019/english
+    ```
+    or
+    ```
+    python encode.py checkpoint=checkpoints/cpc/english2019/model.ckpt-22000.pt split=val save_indices=True out_dir=outputs/buckeye/val_zs2019/ dataset=buckeye
     ```
     
 2. Run ABX evaluation script (see [bootphon/zerospeech2020](https://github.com/bootphon/zerospeech2020)).
