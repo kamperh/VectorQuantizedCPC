@@ -43,6 +43,10 @@ Leader-board for the ZeroSpeech 2020 challenge can be found [here](https://zeros
     ```
     python preprocess.py in_dir=../datasets/2020/2019 dataset=2019/english
     ```
+    or
+    ```
+    python preprocess.py in_dir=/home/kamperh/endgame/projects/stellenbosch/vqseg/datasets/swb300-wavs/ dataset=swbd preprocessing=8khz
+    ```
     
 ## Training
    
