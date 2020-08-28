@@ -17,7 +17,7 @@ def encode_dataset(cfg):
     out_dir.mkdir(exist_ok=True, parents=True)
 
     root_path = Path(utils.to_absolute_path("datasets")) / cfg.dataset.path
-    with open(root_path / "test.json") as file:
+    with open((root_path / cfg.split).with_suffix(".json")) as file:
         metadata = json.load(file)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
