@@ -1,0 +1,10 @@
+preprocessing:
+    sr: 8000
+    n_fft: 1024
+    n_mels: 40
+    fmin: 50
+    preemph: 0.97
+    top_db: 80
+    hop_length: 80
+    win_length: 200
+    bits: 8
