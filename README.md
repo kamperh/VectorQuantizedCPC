@@ -61,6 +61,7 @@ Leader-board for the ZeroSpeech 2020 challenge can be found [here](https://zeros
     or
     ```
     python train_cpc.py checkpoint_dir=checkpoints/cpc/buckeye dataset=buckeye training.sample_frames=64  model.encoder.n_embeddings=256 training.scheduler.warmup_epochs=250
+    python train_cpc.py checkpoint_dir=checkpoints/cpc/swbd1 dataset=swbd training.sample_frames=64  preprocessing=8khz
     ```
     
 2.  Train the vocoder:
@@ -112,6 +113,7 @@ Voice conversion samples are available [here](https://bshall.github.io/VectorQua
     or
     ```
     python encode.py checkpoint=checkpoints/cpc/english2019/model.ckpt-22000.pt split=val save_indices=True out_dir=outputs/buckeye/val_zs2019/ dataset=buckeye
+    python encode.py checkpoint=checkpoints/cpc/swbd1/model.ckpt-22000.pt split=val save_indices=True out_dir=outputs/swbd/val_swbd1/ dataset=swbd preprocessing=8khz 
     ```
     
 2. Run ABX evaluation script (see [bootphon/zerospeech2020](https://github.com/bootphon/zerospeech2020)).
