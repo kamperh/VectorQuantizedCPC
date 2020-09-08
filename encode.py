@@ -32,10 +32,6 @@ def encode_dataset(cfg):
 
     encoder.eval()
 
-    if cfg.save_embedding:
-        embedding_path = out_dir / "embedding.npy"
-        np.save(embedding_path, encoder.codebook.embedding.cpu().numpy())
-
     if cfg.save_auxiliary:
         auxiliary = []
 
@@ -52,7 +48,10 @@ def encode_dataset(cfg):
 
         z = z.squeeze().cpu().numpy()
 
-        out_path = out_dir / path.stem
+        codes_path = out_dir / "codes"
+        codes_path.mkdir(exist_ok=True, parents=True)
+        out_path = codes_path / path.stem
+        # out_path = out_dir / "codes" / path.stem
         with open(out_path.with_suffix(".txt"), "w") as file:
             np.savetxt(file, z, fmt="%.16f")
 
@@ -79,6 +78,11 @@ def encode_dataset(cfg):
             aux = auxiliary.pop().squeeze().cpu().numpy()
             with open(out_path.with_suffix(".txt"), "w") as file:
                 np.savetxt(file, aux, fmt="%.16f")
+
+    if cfg.save_embedding:
+        # embedding_path = out_dir / "embedding.npy"
+        embedding_path = utils.to_absolute_path(cfg.save_embedding)
+        np.save(embedding_path, encoder.codebook.embedding.cpu().numpy())
 
 
 if __name__ == "__main__":
